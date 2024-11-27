@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kotus\\source\\repos\\KanbanApp\\KanbanApp.csproj": {}
+    "C:\\Users\\kotus\\Desktop\\п. практика 2024\\src\\KanbanApp\\KanbanApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kotus\\source\\repos\\KanbanApp\\KanbanApp.csproj": {
+    "C:\\Users\\kotus\\Desktop\\п. практика 2024\\src\\KanbanApp\\KanbanApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kotus\\source\\repos\\KanbanApp\\KanbanApp.csproj",
+        "projectUniqueName": "C:\\Users\\kotus\\Desktop\\п. практика 2024\\src\\KanbanApp\\KanbanApp.csproj",
         "projectName": "KanbanApp",
-        "projectPath": "C:\\Users\\kotus\\source\\repos\\KanbanApp\\KanbanApp.csproj",
+        "projectPath": "C:\\Users\\kotus\\Desktop\\п. практика 2024\\src\\KanbanApp\\KanbanApp.csproj",
         "packagesPath": "C:\\Users\\kotus\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kotus\\source\\repos\\KanbanApp\\obj\\",
+        "outputPath": "C:\\Users\\kotus\\Desktop\\п. практика 2024\\src\\KanbanApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
