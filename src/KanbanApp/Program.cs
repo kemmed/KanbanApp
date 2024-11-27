@@ -1,3 +1,6 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using KanbanApp.Data;
 namespace KanbanApp
 {
     public class Program
@@ -5,6 +8,8 @@ namespace KanbanApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<KanbanAppContext>(options =>
+                options.UseSqlite(builder.Configuration.GetConnectionString("KanbanAppContext") ?? throw new InvalidOperationException("Connection string 'KanbanAppContext' not found.")));
 
             // Add services to the container.
             builder.Services.AddRazorPages();
