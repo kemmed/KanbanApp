@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using KanbanApp.Data;
+﻿using KanbanApp.Data;
+using Microsoft.EntityFrameworkCore;
 namespace KanbanApp
 {
     public class Program
@@ -27,7 +26,13 @@ namespace KanbanApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+
+
             app.UseRouting();
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.UseAuthorization();
 

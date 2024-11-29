@@ -1,0 +1,151 @@
+* {
+    margin: 0;
+}
+
+html,
+body {
+    min-height: 100vh;
+}
+
+body {
+    background: #232323;
+    color: #fff;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.text-success {
+    color: #28a745;
+}
+
+.text-danger {
+    color: #dc3545;
+}
+
+.modal__background {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction:column;
+}
+
+.modal__window {
+    box-sizing: border-box;
+    padding: 29px;
+    border: 1px solid #999;
+    border-radius: 15px;
+}
+.auth-form__title{
+   
+}
+
+@media all and (min-width: 576px) {
+    .modal__window {
+        padding: 49px 79px 29px;
+    }
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    letter-spacing: 1px;
+}
+
+.auth-form__label {
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.auth-form__placeholder {
+    position: absolute;
+    color: #999;
+    cursor: text;
+    font-size: 16px;
+    top: 9px;
+    transition: all 0.2s;
+}
+
+    .auth-form__placeholder.focus {
+        top: -12px;
+        font-size: 12px;
+    }
+
+.auth-form__input {
+    position: relative;
+    width: 240px;
+    height: 40px;
+    background: transparent;
+    color: #ccc;
+    box-sizing: border-box;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    box-shadow: 0 1px 0 0 #666;
+}
+
+    .auth-form__input.focus {
+        box-shadow: 0 2px 0 0 #bbb;
+    }
+
+.auth-form__toggler,
+.auth-form__icon,
+.auth-form__checkbox {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+}
+
+
+.auth-form__toggler {
+    cursor: pointer;
+    right: 2px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.auth-form__icon {
+    color: #666;
+}
+
+.auth-form__toggler:hover .auth-form__icon {
+    color: #ccc;
+}
+
+.password-toggler {
+    opacity: 0;
+}
+
+.auth-form__submit {
+    cursor: pointer;
+    border: 1px solid #ccc;
+    height: 50px;
+    border-radius: 10px;
+    background: transparent;
+    color: #ccc;
+    outline: none;
+}
+
+    .auth-form__submit:hover {
+        background: #fff;
+        border: 1px solid #fff;
+        color: #232323;
+    }
+
+.auth-form__bottom {
+    margin-top: 30px;
+    font-size: 12px;
+    color: #ddd;
+    text-align: center;
+}
+
+    .auth-form__bottom a {
+        color: #007bff;
+    }
+
+        .auth-form__bottom a:hover {
+            color: #ddd;
+        }

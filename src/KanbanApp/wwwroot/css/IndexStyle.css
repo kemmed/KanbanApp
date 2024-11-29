@@ -1,0 +1,75 @@
+.main-window {
+    height: 100vh;
+    display: flex;
+    flex-direction: column; 
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 10px 0 10px;
+}
+
+.add-board-button {
+    cursor: pointer;
+    border: 2px solid #ccc;
+    height: 50px;
+    border-radius: 10px;
+    background: transparent;
+    color: #ccc;
+    outline: none;
+    padding: 10px 15px;
+}
+
+    .add-board-button:hover {
+        background: #fff;
+        border: 2px solid #fff;
+        color: #232323;
+    }
+
+.profile-icon {
+    font-size: 50px;
+    cursor: pointer;
+    color: darkgrey;
+}
+    .profile-icon:hover {
+       color: white; 
+    }
+
+.board-list {
+    flex-grow: 1;
+    margin-top: 20px;
+    overflow-y: auto;
+    background: #2a2a2a;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+.board-item {
+    color: #ccc;
+    width: 350px;
+    height: 200px;
+    margin: 10px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+    font-size: larger;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .board-item:hover {
+        color: #ccc;
+        width: 355px;
+        height: 205px;
+        background: rgba(255, 255, 255, 0.3);
+        border: none;
+        color: #ccc;
+        font-weight: bolder;
+    }

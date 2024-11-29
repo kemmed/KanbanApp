@@ -16,6 +16,12 @@ html {
   position: relative;
   min-height: 100%;
 }
+* {
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: <weight>;
+    font-style: normal;
+}
 
 body {
   margin-bottom: 60px;

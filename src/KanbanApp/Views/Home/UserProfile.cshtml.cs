@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace KanbanApp.Pages
+namespace KanbanApp.Views.Home
 {
-    public class IndexModel : PageModel
+    public class UserProfile : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly ILogger<UserProfile> _logger;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public UserProfile(ILogger<UserProfile> logger)
         {
             _logger = logger;
         }
