@@ -1,0 +1,82 @@
+@startuml usecaseDiagram
+left to right direction
+
+actor Редактор as Editor
+actor СоздательДоски as Creator
+actor Наблюдатель as Watcher
+package "Система управления проектами" {
+    rectangle "Работа с пользователями" {
+        usecase "Регистрация" as RegUC
+        usecase "Авторизация" as AuthUC
+
+        usecase "Редактирование профиля" as UserUC
+            usecase "Сброс пароля" as PassUC
+            usecase "Изменение Email" as EmailUC
+            usecase "Удаление аккаунта" as ProfileDeleteUC
+    }
+
+    rectangle "Работа с досками" {
+        usecase "Работа с досками" as BoardUC
+            usecase "Создание доски" as BoardCreateUC
+            usecase "Изменение доски" as BoardEditUC
+            usecase "Удаление доски" as BoardDeleteUC
+    }
+
+    rectangle "Работа с колонками" {
+        usecase "Работа с колонками" as ColumnUC
+            usecase "Добавление колонки" as ColumnCreateUC
+            usecase "Изменение колонки" as ColumnEditUC
+            usecase "Удаление колонки" as ColumnDeleteUC
+    }
+
+    rectangle "Работа с задачами" {
+        usecase "Работа с задачами" as TaskUC
+            usecase "Добавление задачи" as TaskCreateUC
+            usecase "Редактирование задачи" as TaskEditUC
+            usecase "Перемещение задачи между колонками" as TaskMoveUC
+            usecase "Удаление задачи" as TaskDeletetUC
+    }
+
+    rectangle "Совместная работа" {
+        usecase "Совместная работа" as СollaborationUC
+            usecase "Приглашение пользователей на доску" as InviteUC
+            usecase "Настройка уровней доступа" as AccessUC
+            usecase "Удаление пользователей из доски" as RemoveUC
+    }
+
+
+Editor .|> Creator
+Watcher .|> Editor
+
+Watcher -- RegUC
+Watcher -- AuthUC
+Watcher -- UserUC
+    UserUC <.. PassUC: "extend"
+    UserUC <.. EmailUC: "extend"
+    UserUC <.. ProfileDeleteUC: "extend"
+
+Editor -- ColumnUC
+    ColumnUC <.. ColumnCreateUC: "extend"
+    ColumnUC <.. ColumnEditUC: "extend"
+    ColumnUC <.. ColumnDeleteUC: "extend"
+
+Editor -- TaskUC
+    TaskUC <.. TaskCreateUC: "extend"
+    TaskUC <.. TaskEditUC: "extend"
+    TaskUC <.. TaskMoveUC: "extend"
+    TaskUC <.. TaskDeletetUC: "extend"
+
+Creator -- СollaborationUC
+    СollaborationUC <.. InviteUC: "extend"
+    СollaborationUC <.. AccessUC: "extend"
+    СollaborationUC <.. RemoveUC: "extend"
+
+Creator -- BoardUC
+    BoardUC <.. BoardCreateUC: "extend"
+    BoardUC <.. BoardEditUC: "extend"
+    BoardUC <.. BoardDeleteUC: "extend"
+
+
+
+}
+@enduml
