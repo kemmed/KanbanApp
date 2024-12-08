@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace KanbanApp.Views.Home
+namespace KanbanApp.Views.Users
 {
     public class AuthorizationModel : PageModel
     {

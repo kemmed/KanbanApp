@@ -1,4 +1,22 @@
 ﻿window.onload = function () {
+
+    (function () {
+        const inputText = document.querySelectorAll('.add-board-label');
+
+        inputText.forEach(function (input) {
+            input.addEventListener('focus', function () {
+                this.classList.add('focus');
+                this.parentElement.querySelector('.add-board-placeholder').classList.add('focus');
+            });
+            input.addEventListener('blur', function () {
+                this.classList.remove('focus');
+                if (!this.value) {
+                    this.parentElement.querySelector('.add-board-placeholder').classList.remove('focus');
+                }
+            });
+        });
+    })();
+
     (function () {
         const inputText = document.querySelectorAll('.auth-form__input');
 
@@ -40,35 +58,4 @@
             });
         });
     })();
-
-    //(function () {
-    //    const validEmail = 'test@example.com',
-    //        validPassword = 'qwerty123';
-
-    //    document.body.querySelector('.hint')
-    //        .innerHTML = `<p>${validEmail}</p><p>${validPassword}</p>`;
-
-    //    document.forms['form-auth'].addEventListener('submit', function (e) {
-    //        e.preventDefault();
-
-    //        const answerContainer = this.querySelector('.auth-form__answer'),
-    //            email = this.elements.email.value,
-    //            password = this.elements.password.value;
-
-    //        const placeholders = document.querySelectorAll('.auth-form__placeholder');
-
-    //        if (email == validEmail && password == validPassword) {
-    //            answerContainer.innerHTML = '<span class="text-success">you\'ve been logged successfully</span>';
-    //        }
-
-    //        else {
-    //            placeholders.forEach(function (placeholder) {
-    //                placeholder.classList.remove('focus');
-    //            });
-    //            this.elements.email.value = '';
-    //            this.elements.password.value = '';
-    //            answerContainer.innerHTML = '<span class="text-danger">invalid email or password</span>';
-    //        }
-    //    });
-    //})();
 };

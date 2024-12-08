@@ -42,24 +42,32 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kotus/Desktop/п. практика 2024/src/KanbanApp/Views/Home/Authorization.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBdXRob3JpemF0aW9uLmNzaHRtbA==
+[C:/Users/kotus/Desktop/п. практика 2024/src/KanbanApp/Views/Boards/Board.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9hcmRzXEJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/kotus/Desktop/п. практика 2024/src/KanbanApp/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kotus/Desktop/п. практика 2024/src/KanbanApp/Views/Home/Registration.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxSZWdpc3RyYXRpb24uY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/kotus/Desktop/п. практика 2024/src/KanbanApp/Views/Home/UserProfile.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxVc2VyUHJvZmlsZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/kotus/Desktop/п. практика 2024/src/KanbanApp/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/kotus/Desktop/п. практика 2024/src/KanbanApp/Views/Users/Authorization.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcQXV0aG9yaXphdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/kotus/Desktop/п. практика 2024/src/KanbanApp/Views/Users/Registration.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcUmVnaXN0cmF0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/kotus/Desktop/п. практика 2024/src/KanbanApp/Views/Users/UserList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcVXNlckxpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/kotus/Desktop/п. практика 2024/src/KanbanApp/Views/Users/UserProfile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcVXNlclByb2ZpbGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/kotus/Desktop/п. практика 2024/src/KanbanApp/Pages/Shared/_Layout.cshtml]

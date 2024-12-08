@@ -153,5 +153,11 @@ namespace KanbanApp.Controllers
         {
             return _context.Board.Any(e => e.ID == id);
         }
+
+        [HttpGet("Boards/Board/{boardID}")]
+        public async Task<IActionResult> Board(int boardID)
+        {
+            return View("Board");
+        }
     }
 }

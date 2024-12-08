@@ -13,6 +13,15 @@ namespace KanbanApp
             // Add services to the container.
             builder.Services.AddRazorPages();
 
+            builder.Services.AddControllersWithViews();
+
+            builder.Services.AddSession(options => 
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(90);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -25,7 +34,7 @@ namespace KanbanApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
 
 
             app.UseRouting();

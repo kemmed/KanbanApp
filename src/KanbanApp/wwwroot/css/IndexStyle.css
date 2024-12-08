@@ -13,6 +13,7 @@
 }
 
 .add-board-button {
+    text-decoration: none;
     cursor: pointer;
     border: 2px solid #ccc;
     height: 50px;
@@ -51,6 +52,7 @@
     align-content: flex-start;
 }
 .board-item {
+    text-decoration: none;
     color: #ccc;
     width: 350px;
     height: 200px;
@@ -73,3 +75,24 @@
         color: #ccc;
         font-weight: bolder;
     }
+
+.jquery-modal .modal {
+    position: fixed;
+    top: 30%;
+    left: 38%;
+    width: 350px;
+    height: 175px;
+    background: #39393a;
+    padding-top: 30px;
+}
+
+.modal a.close-modal {
+    top: 1%;
+    right: 1%;
+    display: block;
+    width: 25px;
+}
+.button-link {
+    text-decoration: none;
+    color: black;
+}

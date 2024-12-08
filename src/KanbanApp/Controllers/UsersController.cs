@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KanbanApp.Data;
 using KanbanApp.Models;
+using System.Text;
+using System.Security.Cryptography;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace KanbanApp.Controllers
 {
@@ -56,13 +59,10 @@ namespace KanbanApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Email,HashPass")] User user)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
+            user.HashPass = HashPassword(user.HashPass);
+            _context.Add(user);
+            await _context.SaveChangesAsync();
+            return Redirect("/");
         }
 
         // GET: Users/Edit/5
@@ -149,9 +149,77 @@ namespace KanbanApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //POST проверка при авторизации
+        [HttpPost]
+
+        public async Task<IActionResult> Authorization([Bind("ID,Email,HashPass")] User user)
+        {
+            List<User> users = await _context.User.ToListAsync();
+            var logUser = await _context.User
+                .FirstOrDefaultAsync(m => m.Email == user.Email && m.HashPass == HashPassword(user.HashPass));
+            if (logUser == null)
+            {
+                
+                return Redirect("/Users/AuthError?error=wrongemail");
+            }
+            else
+            {
+                HttpContext.Session.SetInt32("UserID", logUser.ID);
+                return Redirect("/");
+
+                //return Redirect("/Boards/Board");
+            }
+            
+            //HttpContext.Session.Remove("UserID");
+        }
+
         private bool UserExists(int id)
         {
             return _context.User.Any(e => e.ID == id);
+        }
+
+
+        static string HashPassword(string password)
+        {
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hashBytes = sha256.ComputeHash(passwordBytes);
+
+                StringBuilder hashString = new StringBuilder();
+                foreach (byte b in hashBytes)
+                {
+                    hashString.Append(b.ToString("x2"));
+                }
+
+                return hashString.ToString();
+            }
+        }
+
+        public IActionResult AuthError(string error)
+        {
+            if(error == "wrongemail")
+                ViewBag.error = "Неправильный email или пароль.";
+            return View("Authorization");
+        } 
+        
+        public IActionResult Authorization()
+        {
+            return View();
+        }
+        public IActionResult Registration()
+        {
+            return View("Registration");
+        }
+
+        public IActionResult UserProfile()
+        {
+            return View("UserProfile");
+        }
+
+        public IActionResult UserList()
+        {
+            return View("UserList");
         }
     }
 }

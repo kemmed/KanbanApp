@@ -1,0 +1,81 @@
+﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+}
+<header>
+    <h1>Название Доски</h1>
+    <div class="add-buttons">
+        <button onclick="location.href='/Users/UserList'">Список участников</button>
+        <button>Сгенерировать приглашение</button>
+    </div>
+    <a href="/Users/UserProfile" class="profile-icon">
+        <i class="la la-user-circle"></i>
+    </a>
+</header>
+
+<div class="add-buttons">
+    <button onclick="addTask()">Добавить Задачу</button>
+    <button onclick="addColumn()">Добавить Колонку</button>
+</div>
+
+<div class="board">
+    <div class="column" oncontextmenu="showContextMenu(event, 'col1')">
+        <div class="column-title" contenteditable="true">Сделать</div>
+        <div class="task">
+            <div class="task-title">Задача 1</div>
+            <div>Описание: Завершить проект</div>
+            <div>Срок: 2023-10-30</div>
+            <div>Статус: <span class="text-success">В процессе</span></div>
+            <div>Приоритет: Высокий</div>
+            <div>Ответственный: Иван</div>
+        </div>
+        <div class="task">
+            <div class="task-title">Задача 2</div>
+            <div>Описание: Подготовить документы</div>
+            <div>Срок: 2023-11-05</div>
+            <div>Статус: <span class="text-danger">Не начато</span></div>
+            <div>Приоритет: Средний</div>
+            <div>Ответственный: Анна</div>
+        </div>
+    </div>
+
+    <div class="column" oncontextmenu="showContextMenu(event, 'col2')">
+        <div class="column-title" contenteditable="true">В процессе</div>
+        <div class="task">
+            <div class="task-title">Задача 3</div>
+            <div>Описание: Проверить отчет</div>
+            <div>Срок: 2023-11-01</div>
+            <div>Статус: <span class="text-success">В процессе</span></div>
+            <div>Приоритет: Низкий</div>
+            <div>Ответственный: Павел</div>
+        </div>
+    </div>
+
+    <div class="column" oncontextmenu="showContextMenu(event, 'col3')">
+        <div class="column-title" contenteditable="true">Завершено</div>
+        <div class="task">
+            <div class="task-title">Задача 4</div>
+            <div>Описание: Провести встречу</div>
+            <div>Срок: 2023-10-25</div>
+            <div>Статус: <span class="text-success">Завершено</span></div>
+            <div>Приоритет: Высокий</div>
+            <div>Ответственный: Сергей</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addTask() {
+        alert("Добавить Задачу");
+    }
+
+    function addColumn() {
+        alert("Добавить Колонку");
+    }
+
+    function showContextMenu(event, columnId) {
+        event.preventDefault();
+        alert("Показать контекстное меню для " + columnId);
+    }
+</script>

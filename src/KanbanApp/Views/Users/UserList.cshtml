@@ -1,0 +1,46 @@
+﻿@*
+
+*@
+@{
+    Layout = "_Layout";
+}
+<header>
+    <h1>Название Проекта</h1>
+    <a href="/Users/UserProfile" class="profile-icon">
+        <i class="la la-user-circle"></i>
+    </a>
+</header>
+
+<div class="participants">
+    <div class="participant">
+        <div class="participant-email">participant1@example.com (наблюдатель)</div>
+        <div class="participant-buttons">
+            <button onclick="removeParticipant('participant1@example.com')">Удалить</button>
+            <button onclick="changeRole('participant1@example.com')">Изменить роль</button>
+        </div>
+    </div>
+    <div class="participant">
+        <div class="participant-email">participant2@example.com (редактор)</div>
+        <div class="participant-buttons">
+            <button onclick="removeParticipant('participant2@example.com')">Удалить</button>
+            <button onclick="changeRole('participant2@example.com')">Изменить роль</button>
+        </div>
+    </div>
+    <div class="participant">
+        <div class="participant-email">participant3@example.com (редактор)</div>
+        <div class="participant-buttons">
+            <button onclick="removeParticipant('participant3@example.com')">Удалить</button>
+            <button onclick="changeRole('participant3@example.com')">Изменить роль</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function removeParticipant(email) {
+        alert("Удалить участника: " + email);
+    }
+
+    function changeRole(email) {
+        alert("Изменить роль участника: " + email);
+    }
+</script>

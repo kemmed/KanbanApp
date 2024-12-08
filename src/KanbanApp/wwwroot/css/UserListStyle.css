@@ -1,0 +1,72 @@
+html,
+body {
+    min-height: 100vh;
+}
+
+body {
+    background: #232323;
+    color: #fff;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    border-bottom: 1px solid #444;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+.profile-icon {
+    font-size: 50px;
+    cursor: pointer;
+    color: darkgrey;
+}
+
+    .profile-icon:hover {
+        color: white;
+    }
+
+.participants {
+    padding: 20px;
+}
+
+.participant {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #444;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.participant-email {
+    font-size: 16px;
+}
+
+.participant-buttons {
+    display: flex;
+}
+
+    .participant-buttons button {
+        cursor: pointer;
+        border: 2px solid #ccc;
+        height: 40px;
+        border-radius: 10px;
+        background: transparent;
+        color: #ccc;
+        outline: none;
+        padding: 5px 10px;
+        margin-left: 5px;
+    }
+
+        .participant-buttons button:hover {
+            background: #fff;
+            border: 2px solid #fff;
+            color: #232323;
+        }
