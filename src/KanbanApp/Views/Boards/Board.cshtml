@@ -1,13 +1,17 @@
-﻿@page
+﻿@using KanbanApp.Controllers
+@using KanbanApp.Models
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model List<Column>
+
 @{
     Layout = "_Layout";
 }
 <header>
-    <h1>Название Доски</h1>
+    <h1>@ViewBag.BoardName</h1>
     <div class="add-buttons">
         <button onclick="location.href='/Users/UserList'">Список участников</button>
-        <button>Сгенерировать приглашение</button>
+        <a href="#generate-link" rel="modal:open">Сгенерировать приглашение</a>
+        <a href="#delete-board" rel="modal:open" class="delete">Удалить доску</a>
     </div>
     <a href="/Users/UserProfile" class="profile-icon">
         <i class="la la-user-circle"></i>
@@ -15,67 +19,215 @@
 </header>
 
 <div class="add-buttons">
-    <button onclick="addTask()">Добавить Задачу</button>
-    <button onclick="addColumn()">Добавить Колонку</button>
+    @if (Model.Count > 0)
+    {
+        <a href="#add-task" rel="modal:open">Добавить Задачу</a>
+    }
+    <form asp-action="CreateColumn" asp-controller="Boards" method="post">
+        <input type="hidden" value="@ViewBag.BoardID" name="boardID" />
+        <button>Добавить Колонку</button>
+    </form>
+    
 </div>
 
 <div class="board">
-    <div class="column" oncontextmenu="showContextMenu(event, 'col1')">
-        <div class="column-title" contenteditable="true">Сделать</div>
-        <div class="task">
-            <div class="task-title">Задача 1</div>
-            <div>Описание: Завершить проект</div>
-            <div>Срок: 2023-10-30</div>
-            <div>Статус: <span class="text-success">В процессе</span></div>
-            <div>Приоритет: Высокий</div>
-            <div>Ответственный: Иван</div>
-        </div>
-        <div class="task">
-            <div class="task-title">Задача 2</div>
-            <div>Описание: Подготовить документы</div>
-            <div>Срок: 2023-11-05</div>
-            <div>Статус: <span class="text-danger">Не начато</span></div>
-            <div>Приоритет: Средний</div>
-            <div>Ответственный: Анна</div>
-        </div>
-    </div>
+    <div class="boardWrapper">
+        @foreach (Column col in Model)
+        {
+            <div class="column">
+                <div class="column-title">@col.Name</div>
+                @if (Model.Count > 1)
+                {
+                    <a href="#delete-column" rel="modal:open" class="close-button" data-column-id="@col.ID"></a>
+                }
+                @foreach (IssueColumn ic in col.IssueColumns)
+                {
+                    string taskClass = "";
 
-    <div class="column" oncontextmenu="showContextMenu(event, 'col2')">
-        <div class="column-title" contenteditable="true">В процессе</div>
-        <div class="task">
-            <div class="task-title">Задача 3</div>
-            <div>Описание: Проверить отчет</div>
-            <div>Срок: 2023-11-01</div>
-            <div>Статус: <span class="text-success">В процессе</span></div>
-            <div>Приоритет: Низкий</div>
-            <div>Ответственный: Павел</div>
-        </div>
-    </div>
+                    switch (ic.Issue.Priority)
+                    {
+                        case Priority.Low:
+                            taskClass = "task low-priority";
+                            break;
+                        case Priority.Middle:
+                            taskClass = "task middle-priority";
+                            break;
+                        case Priority.High:
+                            taskClass = "task high-priority";
+                            break;
+                        default:
+                            taskClass = "task";
+                            break;
+                    }
 
-    <div class="column" oncontextmenu="showContextMenu(event, 'col3')">
-        <div class="column-title" contenteditable="true">Завершено</div>
-        <div class="task">
-            <div class="task-title">Задача 4</div>
-            <div>Описание: Провести встречу</div>
-            <div>Срок: 2023-10-25</div>
-            <div>Статус: <span class="text-success">Завершено</span></div>
-            <div>Приоритет: Высокий</div>
-            <div>Ответственный: Сергей</div>
-        </div>
+                    <a class="edit-task-link" href="#edit-task" rel="modal:open" data-task-id="@ic.Issue.ID">
+                        <div class="@taskClass">
+                            <div class="task-title">@ic.Issue.Name</div>
+                            <div>Описание: @ic.Issue.Description</div>
+                            <div>Срок: @ic.Issue.DeadlineDate.ToString("d")</div>
+                            <div>Статус: @Issue.StatusToString(ic.Issue.Status)</div>
+                            <div>Приоритет: @Issue.PriorityToString(ic.Issue.Priority)</div>
+                            <div>Ответственный: @ic.Issue.Performer.Email</div>
+                            <div>Создатель: @ic.Issue.Creator.Email</div>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
     </div>
 </div>
 
+<!--------------------------------------------------------------->
+<form asp-action="CreateTask" asp-controller="Boards" id="add-task" class="modal createTask" method="post">
+    <input type="hidden" value="@ViewBag.BoardID" name="boardID"/>
+    <label class="input-form__label">
+        <span class="input-placeholder">название</span>
+        <input class="form__input input-task" name="Name" autocomplete="off" required>
+    </label>
+    <label class="input-form__label">
+        <span class="input-placeholder">описание</span>
+        <input class="form__input input-task-description" name="Description" autocomplete="off">
+    </label>
+
+    <label class="input-form__label">
+        <span class="input-placeholder">срок</span>
+        <input class="form__input input-date" type="date" name="DeadlineDate" required value="@DateTime.Now.ToString("yyyy-MM-dd")">
+    </label>
+    <label class="input-form__label">
+        <span class="input-placeholder">статус</span>
+        <select class="form__input input-select" name="Status" required>
+            <option value="0">Сделать</option>
+            <option value="1">В процессе</option>
+            <option value="2">Проверяется</option>
+            <option value="3">Выполнена</option>
+        </select>
+    </label>
+    <label class="input-form__label">
+        <span class="input-placeholder">приоритет</span>
+        <select class="form__input input-select" name="Priority" required>
+            <option value="0">низкий</option>
+            <option value="1">средний</option>  
+            <option value="2">высокий</option>
+        </select>
+    </label>
+    <label class="input-form__label">
+        <span class="input-placeholder">ответственный</span>
+        <select class="form__input input-select" name="PerformerID" required>
+            @foreach (SelectListItem option in ViewBag.Responsibilities)
+            {
+                <option value="@option.Value">@option.Text</option>
+            }
+        </select>
+    </label>
+
+    <button class="add-board-button">Добавить</button>
+    <a href="#" rel="modal:close"></a>
+</form>
+
+
+<form asp-action="DeleteColumn" asp-controller="Boards" id="delete-column" class="modal delete" method="post">
+    <input type="hidden" value="@ViewBag.BoardID" name="boardID" />
+    <input type="hidden" id="columnID" name="columnID"/>
+    <p>Подтвердите удаление колонки.</p>
+    <button class="add-board-button">Подтвердить</button>
+    <a href="#" rel="modal:close"></a>
+</form>
+
+
+<form asp-action="DeleteBoard" asp-controller="Boards" id="delete-board" class="modal delete" method="post">
+    <input type="hidden" value="@ViewBag.BoardID" name="boardID"/>
+    <p>Подтвердите удаление доски.</p>
+    <button class="add-board-button">Подтвердить</button>
+    <a href="#" rel="modal:close"></a>
+</form>
+
+<form asp-action="GenerateLink" asp-controller="Boards" id="generate-link" class="modal generateLink" method="get">
+    <input type="hidden" value="@ViewBag.BoardID" name="boardID"/>
+    <p>Генерация одноразовой ссылки для подключения к доске</p>
+    <label class="input-form__label">
+        <span class="input-placeholder">выберете роль</span>
+        <select class="form__input input-select" name="UserRole" required>
+            <option value="0">Наблюдатель</option>
+            <option value="1">Редактор</option>
+        </select>
+    </label>
+    <button class="add-board-button">Скопировать ссылку</button>
+    <a href="#" rel="modal:close"></a>
+</form>
+
+<div id="edit-task" class="modal createTask">
+<form asp-action="EditTask" asp-controller="Boards" method="post">
+    <label class="input-form__label">
+        <span class="input-placeholder">название</span>
+        <input class="form__input input-task" name="Name" autocomplete="off" required>
+    </label>
+    <label class="input-form__label">
+        <span class="input-placeholder">описание</span>
+        <input class="form__input input-task-description" name="Description" autocomplete="off">
+    </label>
+
+    <label class="input-form__label">
+        <span class="input-placeholder">срок</span>
+        <input class="form__input input-date" type="date" name="DeadlineDate" required value="@DateTime.Now.ToString("yyyy-MM-dd")">
+    </label>
+    <label class="input-form__label">
+        <span class="input-placeholder">статус</span>
+        <select class="form__input input-select" name="Status" required>
+            <option value="0">Сделать</option>
+            <option value="1">В процессе</option>
+            <option value="2">Проверяется</option>
+            <option value="3">Выполнена</option>
+        </select>
+    </label>
+    <label class="input-form__label">
+        <span class="input-placeholder">приоритет</span>
+        <select class="form__input input-select" name="Priority" required>
+            <option value="0">низкий</option>
+            <option value="1">средний</option>
+            <option value="2">высокий</option>
+        </select>
+    </label>
+    <label class="input-form__label">
+        <span class="input-placeholder">ответственный</span>
+        <select class="form__input input-select" name="PerformerID" required>
+            @foreach (SelectListItem option in ViewBag.Responsibilities)
+            {
+                <option value="@option.Value">@option.Text</option>
+            }
+        </select>
+    </label>
+
+    <button class="add-board-button">Сохранить</button>
+    </form>
+
+    <form asp-action="DeleteTask" asp-controller="Boards" method="post">
+        <input type="hidden" id="taskID" name="taskID" />
+        <input type="hidden" value="@ViewBag.BoardID" name="boardID" />
+        <button class="add-board-button">Удалить</button>
+    </form>
+
+    <a href="#" rel="modal:close"></a>
+</div>
 <script>
-    function addTask() {
-        alert("Добавить Задачу");
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.close-button');
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                const columnID = this.getAttribute('data-column-id');
+                document.getElementById('columnID').value = columnID;
+            });
+        });
+    });
+</script>
 
-    function addColumn() {
-        alert("Добавить Колонку");
-    }
-
-    function showContextMenu(event, columnId) {
-        event.preventDefault();
-        alert("Показать контекстное меню для " + columnId);
-    }
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.edit-task-link');
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                const columnID = this.getAttribute('data-task-id');
+                document.getElementById('taskID').value = columnID;
+            });
+        });
+    });
 </script>

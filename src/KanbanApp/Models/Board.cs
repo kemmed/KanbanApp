@@ -9,7 +9,6 @@
         public User CreatorUser { get; set; }
 
         public List<Column> Columns { get; set; }
-        public List<PriorityType> PriorityTypes { get; set; }
         public List<UserBoard> UserBoards { get; set; }
     }
 }

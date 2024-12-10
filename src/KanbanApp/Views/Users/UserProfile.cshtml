@@ -4,15 +4,49 @@
 @{
     Layout = "_Layout";
 }
-<div class="profile-container">
+<div class="profile-background">
     <h2>Профиль пользователя</h2>
-    <div class="profile-email">
-        <p>Ваш текущий email: user@example.com</p>
-        <input type="email" class="email-input" placeholder="Привязать другую почту" />
-        <button class="button">Привязать</button>
-    </div>
+    <div class="profile-container">
+        <p class="current-email">Ваш текущий email:  <span class="email-highlight">@Model.Email</span></p>
+        <form class="profile-email">
+            <label class="input-form__label-user">
+                <span class="input-placeholder">Привязать другую почту</span>
+                <input class="form__input input-email" type="email" name="Email" autocomplete="off" required>
+            </label>
+            <button class="user-button">Привязать</button>
+        </form>
     
-    <button class="button">Сбросить пароль</button>
-    <button class="button">Удалить аккаунт</button>
-    <button class="button">Выйти из аккаунта</button>
+        <a href="#change-pass" class="user-button" rel="modal:open">Сбросить пароль</a>
+
+        <a href="#delete-profile" class="user-button delete" rel="modal:open">Удалить аккаунт</a>
+
+        <form asp-action="Logout" asp-controller="Users" method="post" class="user-buttons">
+            <button class="user-button">Выйти из аккаунта</button>
+        </form>
+    </div>
 </div>
+
+
+
+
+
+
+<form asp-action="DeleteProfile" asp-controller="User" id="delete-profile" class="modal user">
+    <p>Вы уверены что хотите удалить профиль?</p>
+    <button class="user-button">Подтвердить</button>
+    <a href="#" rel="modal:close"></a>
+</form>
+
+
+<form asp-action="ChangePass" asp-controller="User" id="change-pass" class="modal user">
+    <label class="input-form__label">
+        <span class="input-placeholder">новый пароль</span>
+        <input class="form__input input-password" type="password" name="HashPass" autocomlete="off" required>
+        <div class="auth-form__toggler">
+            <i class="la la-eye auth-form__icon"></i>
+            <input type="checkbox" class="auth-form__checkbox password-toggler">
+        </div>
+    </label>
+    <button class="user-button">Применить новый пароль</button>
+    <a href="#" rel="modal:close"></a>
+</form>

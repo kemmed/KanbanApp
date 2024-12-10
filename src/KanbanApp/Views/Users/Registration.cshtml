@@ -10,22 +10,27 @@
 
         <form asp-action="Create" asp-controller="Users" class="auth-form" name="form-auth" method="post">
 
-            <label class="auth-form__label">
-                <span class="auth-form__placeholder">email</span>
-                <input class="auth-form__input input-email" type="email" name="Email" autocomplete="off" required>
+            <label class="input-form__label">
+                <span class="input-placeholder">email</span>
+                <input class="form__input input-email" type="email" name="Email" autocomplete="off" required>
             </label>
 
-            <label class="auth-form__label">
-                <span class="auth-form__placeholder">пароль</span>
-                <input class="auth-form__input input-password" type="password" name="HashPass" autocomlete="off" required>
+            <label class="input-form__label">
+                <span class="input-placeholder">пароль</span>
+                <input class="form__input input-password" type="password" name="HashPass" autocomlete="off" required>
                 <div class="auth-form__toggler">
                     <i class="la la-eye auth-form__icon"></i>
                     <input type="checkbox" class="auth-form__checkbox password-toggler">
                 </div>
             </label>
 
-            <div class="auth-form__answer"></div>
-
+            @if (ViewBag.error != null)
+            {
+                <div class="auth-form__answer">
+                    <p class="text-danger">@ViewBag.error</p>
+                </div>
+            }
+            
             <input class="auth-form__submit" type="submit" value="Создать">
 
             <div class="auth-form__bottom">

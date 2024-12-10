@@ -1,6 +1,6 @@
 ﻿namespace KanbanApp.Models
 {
-    public enum UserRoles { Admin, Editor, Watcher}
+    public enum UserRoles {  Watcher, Editor, Admin }
     public class UserBoard
     {
         public int ID { get; set; }

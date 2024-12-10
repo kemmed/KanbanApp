@@ -1,38 +1,43 @@
 ﻿window.onload = function () {
 
+    document.addEventListener('DOMContentLoaded', function () {
+        const inputDate = document.querySelector('.input-date');
+        const selectInputs = document.querySelectorAll('.input-select');
+
+        //const today = new Date();
+        //const formattedDate = today.toISOString().split('T')[0];
+        //inputDate.value = formattedDate;
+        inputDate.value = Date.now;
+
+        // Установка первого пункта в выпадающих списках
+        selectInputs.forEach(select => {
+            if (select.options.length > 1) {
+                select.selectedIndex = 1;
+            }
+        });
+    });
+
     (function () {
-        const inputText = document.querySelectorAll('.add-board-label');
+        const inputText = document.querySelectorAll('.form__input');
 
         inputText.forEach(function (input) {
+            if (input.value) {
+                input.classList.add('focus');
+                input.parentElement.querySelector('.input-placeholder').classList.add('focus');
+            }
             input.addEventListener('focus', function () {
                 this.classList.add('focus');
-                this.parentElement.querySelector('.add-board-placeholder').classList.add('focus');
+                this.parentElement.querySelector('.input-placeholder').classList.add('focus');
             });
             input.addEventListener('blur', function () {
                 this.classList.remove('focus');
                 if (!this.value) {
-                    this.parentElement.querySelector('.add-board-placeholder').classList.remove('focus');
+                    this.parentElement.querySelector('.input-placeholder').classList.remove('focus');
                 }
             });
         });
     })();
 
-    (function () {
-        const inputText = document.querySelectorAll('.auth-form__input');
-
-        inputText.forEach(function (input) {
-            input.addEventListener('focus', function () {
-                this.classList.add('focus');
-                this.parentElement.querySelector('.auth-form__placeholder').classList.add('focus');
-            });
-            input.addEventListener('blur', function () {
-                this.classList.remove('focus');
-                if (!this.value) {
-                    this.parentElement.querySelector('.auth-form__placeholder').classList.remove('focus');
-                }
-            });
-        });
-    })();
 
     (function () {
         const togglers = document.querySelectorAll('.password-toggler');

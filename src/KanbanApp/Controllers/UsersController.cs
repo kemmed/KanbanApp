@@ -23,9 +23,13 @@ namespace KanbanApp.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> UserProfile()
         {
-            return View(await _context.User.ToListAsync());
+            int? userSessionID = HttpContext.Session.GetInt32("UserID");
+
+            User currentUser = await _context.User.FindAsync(userSessionID);
+            return View(currentUser);
+            //return View(await _context.User.ToListAsync());
         }
 
         // GET: Users/Details/5
@@ -59,11 +63,18 @@ namespace KanbanApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Email,HashPass")] User user)
         {
+            var existingUser = await _context.User.FirstOrDefaultAsync(u => u.Email == user.Email);
+
+            if (existingUser != null)
+            {
+                return Redirect("/Users/RegError?error=existingemail");
+            }
             user.HashPass = HashPassword(user.HashPass);
             _context.Add(user);
             await _context.SaveChangesAsync();
             return Redirect("/");
         }
+
 
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -84,37 +95,37 @@ namespace KanbanApp.Controllers
         // POST: Users/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Email,HashPass")] User user)
-        {
-            if (id != user.ID)
-            {
-                return NotFound();
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("ID,Email,HashPass")] User user)
+        //{
+        //    if (id != user.ID)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(user);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!UserExists(user.ID))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(user);
+        //}
 
         // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -135,19 +146,19 @@ namespace KanbanApp.Controllers
         }
 
         // POST: Users/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var user = await _context.User.FindAsync(id);
-            if (user != null)
-            {
-                _context.User.Remove(user);
-            }
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var user = await _context.User.FindAsync(id);
+        //    if (user != null)
+        //    {
+        //        _context.User.Remove(user);
+        //    }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         //POST проверка при авторизации
         [HttpPost]
@@ -159,18 +170,22 @@ namespace KanbanApp.Controllers
                 .FirstOrDefaultAsync(m => m.Email == user.Email && m.HashPass == HashPassword(user.HashPass));
             if (logUser == null)
             {
-                
                 return Redirect("/Users/AuthError?error=wrongemail");
             }
             else
             {
                 HttpContext.Session.SetInt32("UserID", logUser.ID);
                 return Redirect("/");
-
-                //return Redirect("/Boards/Board");
             }
             
             //HttpContext.Session.Remove("UserID");
+        }
+        //POST выход из аккаунта
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("UserID");
+            return Redirect("/");
         }
 
         private bool UserExists(int id)
@@ -201,8 +216,14 @@ namespace KanbanApp.Controllers
             if(error == "wrongemail")
                 ViewBag.error = "Неправильный email или пароль.";
             return View("Authorization");
-        } 
-        
+        }
+        public IActionResult RegError(string error)
+        {
+            if (error == "existingemail")
+                ViewBag.error = "На этот email уже зарегистрирован аккаунт.";
+            return View("Registration");
+        }
+
         public IActionResult Authorization()
         {
             return View();
@@ -212,10 +233,6 @@ namespace KanbanApp.Controllers
             return View("Registration");
         }
 
-        public IActionResult UserProfile()
-        {
-            return View("UserProfile");
-        }
 
         public IActionResult UserList()
         {

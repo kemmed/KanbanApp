@@ -43,6 +43,13 @@ namespace KanbanApp.Controllers
             _context.Add(userBoard);
 
             await _context.SaveChangesAsync();
+            Column newColumn = new Column();
+            newColumn.Name = "Сделать";
+            newColumn.BoardID = board.ID;
+            _context.Add(newColumn);
+
+            await _context.SaveChangesAsync();
+
             return Redirect("/");
         }
 

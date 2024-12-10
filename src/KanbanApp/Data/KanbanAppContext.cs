@@ -18,7 +18,6 @@ namespace KanbanApp.Data
         public DbSet<KanbanApp.Models.Column> Column { get; set; } = default!;
         public DbSet<KanbanApp.Models.Issue> Issue { get; set; } = default!;
         public DbSet<KanbanApp.Models.IssueColumn> IssueColumn { get; set; } = default!;
-        public DbSet<KanbanApp.Models.PriorityType> PriorityType { get; set; } = default!;
         public DbSet<KanbanApp.Models.User> User { get; set; } = default!;
         public DbSet<KanbanApp.Models.UserBoard> UserBoard { get; set; } = default!;
     }
