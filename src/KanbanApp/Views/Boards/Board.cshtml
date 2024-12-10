@@ -9,7 +9,7 @@
 <header>
     <h1>@ViewBag.BoardName</h1>
     <div class="add-buttons">
-        <button onclick="location.href='/Users/UserList'">Список участников</button>
+        <a href="/Users/UserList/@ViewBag.BoardID">Список участников</a>
         <a href="#generate-link" rel="modal:open">Сгенерировать приглашение</a>
         <a href="#delete-board" rel="modal:open" class="delete">Удалить доску</a>
     </div>

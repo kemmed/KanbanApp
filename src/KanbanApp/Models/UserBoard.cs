@@ -9,5 +9,16 @@
         public UserRoles UserRole { get; set; }
         public User User { get; set; }
         public Board Board { get; set; }
+        public static string RoleToString(UserRoles UR)
+        {
+            if (UR == UserRoles.Watcher)
+                return "Наблюдатель";
+            else if (UR == UserRoles.Editor)
+                return "Редактор";
+            else if (UR == UserRoles.Admin)
+                return "Создатель";
+            return "-";
+        }
     }
+    
 }

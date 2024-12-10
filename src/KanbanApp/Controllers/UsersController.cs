@@ -72,6 +72,7 @@ namespace KanbanApp.Controllers
             user.HashPass = HashPassword(user.HashPass);
             _context.Add(user);
             await _context.SaveChangesAsync();
+            HttpContext.Session.Remove("UserID");
             return Redirect("/");
         }
 
@@ -177,7 +178,7 @@ namespace KanbanApp.Controllers
                 HttpContext.Session.SetInt32("UserID", logUser.ID);
                 return Redirect("/");
             }
-            
+
             //HttpContext.Session.Remove("UserID");
         }
         //POST выход из аккаунта
@@ -191,6 +192,36 @@ namespace KanbanApp.Controllers
         private bool UserExists(int id)
         {
             return _context.User.Any(e => e.ID == id);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditEmail([Bind("ID,Email")] User user)
+        {
+            int? userSessionID = HttpContext.Session.GetInt32("UserID");
+            var currentUser = _context.User.FirstOrDefault(x => x.ID == userSessionID);
+            if ((_context.User.FirstOrDefault(x => x.Email == user.Email) == null))
+            {
+                currentUser.Email = user.Email;
+            }
+            else if (currentUser.Email == user.Email)
+            {
+                return Redirect("UserProfile");
+            }
+            else
+            {
+                return Redirect("/Users/EditEmailError?error=existingemail");
+            }
+            await _context.SaveChangesAsync();
+            return Redirect("UserProfile");
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangePass([Bind("ID,HashPass")] User user)
+        {
+            int? userSessionID = HttpContext.Session.GetInt32("UserID");
+            var currentUser = _context.User.FirstOrDefault(x => x.ID == userSessionID);
+
+            currentUser.HashPass = HashPassword(user.HashPass);
+            await _context.SaveChangesAsync();
+            return Redirect("UserProfile");
         }
 
 
@@ -213,7 +244,7 @@ namespace KanbanApp.Controllers
 
         public IActionResult AuthError(string error)
         {
-            if(error == "wrongemail")
+            if (error == "wrongemail")
                 ViewBag.error = "Неправильный email или пароль.";
             return View("Authorization");
         }
@@ -222,6 +253,13 @@ namespace KanbanApp.Controllers
             if (error == "existingemail")
                 ViewBag.error = "На этот email уже зарегистрирован аккаунт.";
             return View("Registration");
+        }
+        public IActionResult EditEmailError(string error)
+        {
+            if (error == "existingemail")
+                ViewBag.error = "На этот email уже зарегистрирован аккаунт.";
+            //return View("UserProfile");
+            return Redirect("UserProfile");
         }
 
         public IActionResult Authorization()
@@ -233,10 +271,20 @@ namespace KanbanApp.Controllers
             return View("Registration");
         }
 
-
         public IActionResult UserList()
         {
             return View("UserList");
+        }
+        [HttpGet("Users/UserList/{boardID}")]
+        public async Task<IActionResult> UserList(int boardID)
+        {
+            ViewBag.BoardName = _context.Board.FirstOrDefault(x => x.ID == boardID).Name;
+            ViewBag.BoardID = _context.Board.FirstOrDefault(x => x.ID == boardID).ID;
+            List<UserBoard> boardUsers = _context.UserBoard.Where(x => x.BoardID == boardID).Include(x => x.User).ToList();
+
+
+
+            return View(boardUsers);
         }
     }
 }

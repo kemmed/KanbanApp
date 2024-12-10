@@ -8,14 +8,20 @@
     <h2>Профиль пользователя</h2>
     <div class="profile-container">
         <p class="current-email">Ваш текущий email:  <span class="email-highlight">@Model.Email</span></p>
-        <form class="profile-email">
+        <form class="profile-email" asp-action="EditEmail" asp-controller="Users" method="post">
             <label class="input-form__label-user">
                 <span class="input-placeholder">Привязать другую почту</span>
                 <input class="form__input input-email" type="email" name="Email" autocomplete="off" required>
             </label>
             <button class="user-button">Привязать</button>
+            @if (ViewBag.error != null)
+            {
+                <div class="auth-form__answer">
+                    <p class="text-danger">@ViewBag.error</p>
+                </div>
+            }
         </form>
-    
+        
         <a href="#change-pass" class="user-button" rel="modal:open">Сбросить пароль</a>
 
         <a href="#delete-profile" class="user-button delete" rel="modal:open">Удалить аккаунт</a>
@@ -31,14 +37,14 @@
 
 
 
-<form asp-action="DeleteProfile" asp-controller="User" id="delete-profile" class="modal user">
+<form asp-action="DeleteProfile" asp-controller="Users" id="delete-profile" class="modal user" method="post">
     <p>Вы уверены что хотите удалить профиль?</p>
     <button class="user-button">Подтвердить</button>
     <a href="#" rel="modal:close"></a>
 </form>
 
 
-<form asp-action="ChangePass" asp-controller="User" id="change-pass" class="modal user">
+<form asp-action="ChangePass" asp-controller="Users" id="change-pass" class="modal user" method="post">
     <label class="input-form__label">
         <span class="input-placeholder">новый пароль</span>
         <input class="form__input input-password" type="password" name="HashPass" autocomlete="off" required>
