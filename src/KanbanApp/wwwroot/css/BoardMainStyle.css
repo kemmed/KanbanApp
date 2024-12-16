@@ -54,10 +54,18 @@
     padding: 10px;
     margin-bottom: 10px;
     cursor: pointer;
+    max-width: 100%;
+    word-wrap: break-word;
 }
+
     .task:hover {
         background: #666;
     }
+.task-description {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+}
 .low-priority {
     background-color: #738e6a;
 }
@@ -82,6 +90,9 @@
 .task .task-title {
     font-weight: bold;
     text-decoration: underline;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 .add-buttons {

@@ -68,30 +68,32 @@
 
                     <a class="edit-task-link" href="#edit-task" rel="modal:open" data-task-id="@ic.Issue.ID">
                         <div class="@taskClass">
-                            <div class="task-title">@Issue.StringCut(ic.Issue.Name)</div>
-                            <div>Описание: @Issue.StringCut(ic.Issue.Description)</div>
+                            @* <div class="task-title">@Issue.StringCut(ic.Issue.Name)</div> *@
+                            <div class="task-title">@ic.Issue.Name</div>
+                            <div class="task-description"><span style="font-weight: bold">Описание: </span>@ic.Issue.Description</div>
+
                             @if (ic.Issue.DeadlineDate.Date <= DateTime.Now.Date && ic.Issue.Status != IssueStatus.Completed)
                             {
-                                <div>Срок: <span style="color: #a82f2f; font-weight: bold;">@ic.Issue.DeadlineDate.ToString("d")</span></div>
+                                <div><span style="font-weight: bold">Срок: </span><span style="color: #a82f2f; font-weight: bold;">@ic.Issue.DeadlineDate.ToString("d")</span></div>
                             }
                             else
                             {
-                                <div>Срок: @ic.Issue.DeadlineDate.ToString("d")</div>
+                                <div><span style="font-weight: bold">Срок: </span>@ic.Issue.DeadlineDate.ToString("d")</div>
                             }
                             @if (ic.Issue.Status == IssueStatus.Completed && ic.Issue.EndDate.ToString("d") != "01.01.0001")
                             {
                                 if (@ic.Issue.EndDate.Date <= ic.Issue.DeadlineDate.Date){
-                                     <div>Завершена: <span style="color: #1f5b0d; font-weight: bold;">@ic.Issue.EndDate.ToString("d")</span></div>
+                                    <div><span style="font-weight: bold">Завершена: </span><span style="color: #1f5b0d; font-weight: bold;">@ic.Issue.EndDate.ToString("d")</span></div>
                                 }
                                 else
                                 {
-                                    <div>Завершена: <span style="color: #a82f2f; font-weight: bold;">@ic.Issue.EndDate.ToString("d")</span></div>
+                                    <div><span style="font-weight: bold">Завершена: </span><span style="color: #a82f2f; font-weight: bold;">@ic.Issue.EndDate.ToString("d")</span></div>
                                 }
                             }
-                            <div>Статус: @Issue.StatusToString(ic.Issue.Status)</div>
-                            <div>Приоритет: @Issue.PriorityToString(ic.Issue.Priority)</div>
-                            <div>Ответственный: @Issue.StringCut(ic.Issue.Performer.Email)</div>
-                            <div>Создатель: @Issue.StringCut(ic.Issue.Creator.Email)</div>
+                            <div><span style="font-weight: bold">Статус: </span>@Issue.StatusToString(ic.Issue.Status)</div>
+                            <div><span style="font-weight: bold">Приоритет: </span>@Issue.PriorityToString(ic.Issue.Priority)</div>
+                            <div><span style="font-weight: bold">Ответственный: </span>@Issue.StringCut(ic.Issue.Performer.Email)</div>
+                            <div><span style="font-weight: bold">Создатель: </span>@Issue.StringCut(ic.Issue.Creator.Email)</div>
                         </div>
 
                     </a>

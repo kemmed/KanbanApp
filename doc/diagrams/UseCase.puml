@@ -25,6 +25,7 @@ package "Система управления проектами" {
             usecase "Добавить задачу" as TaskCreateUC
             usecase "Редактировать задачу" as TaskEditUC
             usecase "Удалить задачу" as TaskDeletetUC
+            usecase "Восстановить задачу" as TaskRestoreUC
     }
 
     rectangle "Совместная работа" {
@@ -46,6 +47,7 @@ Editor -- TaskUC
     TaskUC ..> TaskCreateUC: "include"
     TaskUC ..> TaskEditUC: "include"
     TaskUC ..> TaskDeletetUC: "include"
+    TaskUC ..>TaskRestoreUC: "include"
 
 Creator -- СollaborationUC
     СollaborationUC ..> InviteUC: "include"
