@@ -26,39 +26,14 @@ namespace KanbanApp.Controllers
         public async Task<IActionResult> UserProfile()
         {
             int? userSessionID = HttpContext.Session.GetInt32("UserID");
-
             User currentUser = await _context.User.FindAsync(userSessionID);
-            return View(currentUser);
-            //return View(await _context.User.ToListAsync());
-        }
-
-        // GET: Users/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
+            if(currentUser != null)
+                return View(currentUser);
+            else
                 return NotFound();
-            }
-
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
-        // GET: Users/Create
-        public IActionResult Create()
-        {
-            return View();
         }
 
         // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Email,HashPass")] User user)
@@ -76,94 +51,7 @@ namespace KanbanApp.Controllers
             return Redirect("/");
         }
 
-
-        // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.User.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return View(user);
-        }
-
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("ID,Email,HashPass")] User user)
-        //{
-        //    if (id != user.ID)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(user);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!UserExists(user.ID))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(user);
-        //}
-
-        // GET: Users/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
-        // POST: Users/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var user = await _context.User.FindAsync(id);
-        //    if (user != null)
-        //    {
-        //        _context.User.Remove(user);
-        //    }
-
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //POST проверка при авторизации
         [HttpPost]
-
         public async Task<IActionResult> Authorization([Bind("ID,Email,HashPass")] User user)
         {
             List<User> users = await _context.User.ToListAsync();
@@ -178,8 +66,6 @@ namespace KanbanApp.Controllers
                 HttpContext.Session.SetInt32("UserID", logUser.ID);
                 return Redirect("/");
             }
-
-            //HttpContext.Session.Remove("UserID");
         }
         //POST выход из аккаунта
         [HttpPost]
@@ -223,8 +109,6 @@ namespace KanbanApp.Controllers
             await _context.SaveChangesAsync();
             return Redirect("UserProfile");
         }
-
-
         static string HashPassword(string password)
         {
             byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
@@ -254,12 +138,16 @@ namespace KanbanApp.Controllers
                 ViewBag.error = "На этот email уже зарегистрирован аккаунт.";
             return View("Registration");
         }
-        public IActionResult EditEmailError(string error)
+        public async Task<IActionResult> EditEmailError(string error)
         {
             if (error == "existingemail")
                 ViewBag.error = "На этот email уже зарегистрирован аккаунт.";
-            //return View("UserProfile");
-            return Redirect("UserProfile");
+
+            int? userSessionID = HttpContext.Session.GetInt32("UserID");
+
+            User currentUser = await _context.User.FindAsync(userSessionID);
+
+            return View("UserProfile", currentUser);
         }
 
         public IActionResult Authorization()
@@ -278,13 +166,22 @@ namespace KanbanApp.Controllers
         [HttpGet("Users/UserList/{boardID}")]
         public async Task<IActionResult> UserList(int boardID)
         {
+            int? userSessionID = HttpContext.Session.GetInt32("UserID");
+            User currentUser = await _context.User.FindAsync(userSessionID);
+            if (currentUser == null && _context.UserBoard.FirstOrDefault(x => x.UserID == currentUser.ID) == null)
+            {
+                return NotFound();
+            }
             ViewBag.BoardName = _context.Board.FirstOrDefault(x => x.ID == boardID).Name;
             ViewBag.BoardID = _context.Board.FirstOrDefault(x => x.ID == boardID).ID;
+            ViewBag.UserID = HttpContext.Session.GetInt32("UserID");
             List<UserBoard> boardUsers = _context.UserBoard.Where(x => x.BoardID == boardID).Include(x => x.User).ToList();
 
-
+            List<User> users = await _context.UserBoard.Where(x => x.BoardID == boardID).Select(x => x.User).ToListAsync();
+            ViewBag.BoardUsers = users;
 
             return View(boardUsers);
+                
         }
     }
 }

@@ -10,5 +10,13 @@
 
         public List<Column> Columns { get; set; }
         public List<UserBoard> UserBoards { get; set; }
+        public static string StringCut(string str)
+        {
+            if (str.Length > 20)
+            {
+                str = str.Substring(0, 19) + "...";
+            }
+            return str;
+        }
     }
 }

@@ -1,0 +1,54 @@
+﻿@using KanbanApp.Controllers
+@using KanbanApp.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model List<Column>
+
+@{
+    Layout = "_Layout";
+}
+<header>
+    <h1>@Board.StringCut(@ViewBag.BoardName)</h1>
+    <h3>Архив удаленных задач</h3>
+    <a href="/Users/UserProfile" class="profile-icon">
+        <i class="la la-user-circle"></i>
+    </a>
+</header>
+
+<div class="archived-tasks">
+    <table>
+        <thead>
+            <tr>
+                <th>Удалена</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Приоритет</th>
+                <th>Статус</th>
+                <th>Создатель</th>
+                <th>Ответственный</th>
+                <th>Срок</th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Column col in Model)
+            {
+                @foreach (IssueColumn ic in col.IssueColumns)
+                {
+                    <tr>
+                        <td>@ic.DeleteDate.ToString("d")</td>
+                        <td>@ic.Issue.Name</td>
+                        <td>@ic.Issue.Description</td>
+                        <td>@Issue.PriorityToString(ic.Issue.Priority)</td>
+                        <td>@Issue.StatusToString(ic.Issue.Status)</td>
+                        <td>@Issue.StringCut(ic.Issue.Creator.Email)</td>
+                        <td>@Issue.StringCut(ic.Issue.Performer.Email)</td>
+                        <td>@ic.Issue.DeadlineDate.ToString("d")</td>
+                        <td>
+                            <a href="/Boards/RestoreTask/@ic.IssueID?boardID=@ViewBag.BoardID" class="restore-button">Восстановить</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

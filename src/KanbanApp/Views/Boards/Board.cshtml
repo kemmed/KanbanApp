@@ -7,11 +7,22 @@
     Layout = "_Layout";
 }
 <header>
-    <h1>@ViewBag.BoardName</h1>
+    @if (ViewBag.UserAdmin)
+    {
+        <a href="#edit-board" rel="modal:open" class="board-name">
+            <h1>@Board.StringCut(@ViewBag.BoardName)</h1>
+        </a>
+    }
+    else {
+        <h1>@ViewBag.BoardName</h1>
+    }
     <div class="add-buttons">
-        <a href="/Users/UserList/@ViewBag.BoardID">Список участников</a>
-        <a href="#generate-link" rel="modal:open">Сгенерировать приглашение</a>
-        <a href="#delete-board" rel="modal:open" class="delete">Удалить доску</a>
+        @if (ViewBag.UserAdmin)
+        {   <a href="/Users/UserList/@ViewBag.BoardID">Список участников</a>
+            <a href="#generate-link" rel="modal:open">Сгенерировать приглашение</a>
+            <a href="#delete-board" rel="modal:open" class="delete">Удалить доску</a>
+            <a href="/Boards/ArchiveOfTasks/@ViewBag.BoardID">Архив удаленных задач</a>
+        }
     </div>
     <a href="/Users/UserProfile" class="profile-icon">
         <i class="la la-user-circle"></i>
@@ -25,7 +36,6 @@
     }
     <form asp-action="CreateColumn" asp-controller="Boards" method="post">
         <input type="hidden" value="@ViewBag.BoardID" name="boardID" />
-        <button>Добавить Колонку</button>
     </form>
     
 </div>
@@ -36,10 +46,6 @@
         {
             <div class="column">
                 <div class="column-title">@col.Name</div>
-                @if (Model.Count > 1)
-                {
-                    <a href="#delete-column" rel="modal:open" class="close-button" data-column-id="@col.ID"></a>
-                }
                 @foreach (IssueColumn ic in col.IssueColumns)
                 {
                     string taskClass = "";
@@ -62,14 +68,32 @@
 
                     <a class="edit-task-link" href="#edit-task" rel="modal:open" data-task-id="@ic.Issue.ID">
                         <div class="@taskClass">
-                            <div class="task-title">@ic.Issue.Name</div>
-                            <div>Описание: @ic.Issue.Description</div>
-                            <div>Срок: @ic.Issue.DeadlineDate.ToString("d")</div>
+                            <div class="task-title">@Issue.StringCut(ic.Issue.Name)</div>
+                            <div>Описание: @Issue.StringCut(ic.Issue.Description)</div>
+                            @if (ic.Issue.DeadlineDate.Date <= DateTime.Now.Date && ic.Issue.Status != IssueStatus.Completed)
+                            {
+                                <div>Срок: <span style="color: #a82f2f; font-weight: bold;">@ic.Issue.DeadlineDate.ToString("d")</span></div>
+                            }
+                            else
+                            {
+                                <div>Срок: @ic.Issue.DeadlineDate.ToString("d")</div>
+                            }
+                            @if (ic.Issue.Status == IssueStatus.Completed && ic.Issue.EndDate.ToString("d") != "01.01.0001")
+                            {
+                                if (@ic.Issue.EndDate.Date <= ic.Issue.DeadlineDate.Date){
+                                     <div>Завершена: <span style="color: #1f5b0d; font-weight: bold;">@ic.Issue.EndDate.ToString("d")</span></div>
+                                }
+                                else
+                                {
+                                    <div>Завершена: <span style="color: #a82f2f; font-weight: bold;">@ic.Issue.EndDate.ToString("d")</span></div>
+                                }
+                            }
                             <div>Статус: @Issue.StatusToString(ic.Issue.Status)</div>
                             <div>Приоритет: @Issue.PriorityToString(ic.Issue.Priority)</div>
-                            <div>Ответственный: @ic.Issue.Performer.Email</div>
-                            <div>Создатель: @ic.Issue.Creator.Email</div>
+                            <div>Ответственный: @Issue.StringCut(ic.Issue.Performer.Email)</div>
+                            <div>Создатель: @Issue.StringCut(ic.Issue.Creator.Email)</div>
                         </div>
+
                     </a>
                 }
             </div>
@@ -78,6 +102,16 @@
 </div>
 
 <!--------------------------------------------------------------->
+<form asp-action="EditBoard" asp-controller="Boards" id="edit-board" class="modal">
+    <input type="hidden" value="@ViewBag.BoardID" name="boardID" />
+    <label class="input-form__label">
+        <span class="input-placeholder">название</span>
+        <input class="form__input input-name" name="Name" autocomplete="off" required value="@ViewBag.BoardName">
+    </label>
+    <button class="add-board-button">Сохранить</button>
+    <a href="#" rel="modal:close"></a>
+</form>
+
 <form asp-action="CreateTask" asp-controller="Boards" id="add-task" class="modal createTask" method="post">
     <input type="hidden" value="@ViewBag.BoardID" name="boardID"/>
     <label class="input-form__label">
@@ -96,16 +130,15 @@
     <label class="input-form__label">
         <span class="input-placeholder">статус</span>
         <select class="form__input input-select" name="Status" required>
-            <option value="0">Сделать</option>
+            <option value="0" selected>Сделать</option>
             <option value="1">В процессе</option>
             <option value="2">Проверяется</option>
-            <option value="3">Выполнена</option>
         </select>
     </label>
     <label class="input-form__label">
         <span class="input-placeholder">приоритет</span>
         <select class="form__input input-select" name="Priority" required>
-            <option value="0">низкий</option>
+            <option value="0" selected>низкий</option>
             <option value="1">средний</option>  
             <option value="2">высокий</option>
         </select>
@@ -125,13 +158,13 @@
 </form>
 
 
-<form asp-action="DeleteColumn" asp-controller="Boards" id="delete-column" class="modal delete" method="post">
+@* <form asp-action="DeleteColumn" asp-controller="Boards" id="delete-column" class="modal delete" method="post">
     <input type="hidden" value="@ViewBag.BoardID" name="boardID" />
     <input type="hidden" id="columnID" name="columnID"/>
     <p>Подтвердите удаление колонки.</p>
     <button class="add-board-button">Подтвердить</button>
     <a href="#" rel="modal:close"></a>
-</form>
+</form> *@
 
 
 <form asp-action="DeleteBoard" asp-controller="Boards" id="delete-board" class="modal delete" method="post">
@@ -144,89 +177,86 @@
 <form asp-action="GenerateLink" asp-controller="Boards" id="generate-link" class="modal generateLink" method="get">
     <input type="hidden" value="@ViewBag.BoardID" name="boardID"/>
     <p>Генерация одноразовой ссылки для подключения к доске</p>
-    <label class="input-form__label">
-        <span class="input-placeholder">выберете роль</span>
-        <select class="form__input input-select" name="UserRole" required>
-            <option value="0">Наблюдатель</option>
-            <option value="1">Редактор</option>
-        </select>
-    </label>
-    <button class="add-board-button">Скопировать ссылку</button>
+    <button onclick="navigator.clipboard.writeText('https://localhost:7203/Boards/JoinBoard/@ViewBag.BoardID'); return false;" class="add-board-button">Скопировать ссылку</button>
+
+    @* https://localhost:7203/Boards/JoinBoard/@ViewBag.BoardID *@
     <a href="#" rel="modal:close"></a>
 </form>
 
-<div id="edit-task" class="modal createTask">
-<form asp-action="EditTask" asp-controller="Boards" method="post">
-    <label class="input-form__label">
-        <span class="input-placeholder">название</span>
-        <input class="form__input input-task" name="Name" autocomplete="off" required>
-    </label>
-    <label class="input-form__label">
-        <span class="input-placeholder">описание</span>
-        <input class="form__input input-task-description" name="Description" autocomplete="off">
-    </label>
+<div id="edit-task" class="modal editTask">
+    @foreach (Issue task in ViewBag.BoardTasks)
+    {
+        <div ID="ISSUE@(@task.ID)" class="hidden issueform">
+            <form asp-action="EditTask" asp-controller="Boards" method="post">
+            <input type="hidden" value="@ViewBag.BoardID" name="boardID" />
+            <input type="hidden" value="@task.ID" name="taskID" id="taskID"/>
+            <label class="input-form__label">
+                <span class="input-placeholder">название</span>
+                <input class="form__input input-task" name="Name" autocomplete="off" required value="@task.Name">
+            </label>
+            <label class="input-form__label">
+                <span class="input-placeholder">описание</span>
+                    <input class="form__input input-task-description" name="Description" autocomplete="off" value="@task.Description">
+            </label>
 
-    <label class="input-form__label">
-        <span class="input-placeholder">срок</span>
-        <input class="form__input input-date" type="date" name="DeadlineDate" required value="@DateTime.Now.ToString("yyyy-MM-dd")">
-    </label>
-    <label class="input-form__label">
-        <span class="input-placeholder">статус</span>
-        <select class="form__input input-select" name="Status" required>
-            <option value="0">Сделать</option>
-            <option value="1">В процессе</option>
-            <option value="2">Проверяется</option>
-            <option value="3">Выполнена</option>
-        </select>
-    </label>
-    <label class="input-form__label">
-        <span class="input-placeholder">приоритет</span>
-        <select class="form__input input-select" name="Priority" required>
-            <option value="0">низкий</option>
-            <option value="1">средний</option>
-            <option value="2">высокий</option>
-        </select>
-    </label>
-    <label class="input-form__label">
-        <span class="input-placeholder">ответственный</span>
-        <select class="form__input input-select" name="PerformerID" required>
-            @foreach (SelectListItem option in ViewBag.Responsibilities)
-            {
-                <option value="@option.Value">@option.Text</option>
-            }
-        </select>
-    </label>
+            <label class="input-form__label">
+                <span class="input-placeholder">срок</span>
+                <input class="form__input input-date" type="date" name="DeadlineDate" required value="@task.DeadlineDate.ToString("yyyy-MM-dd")">
+            </label>
+            <label class="input-form__label">
+                <span class="input-placeholder">статус</span>
+                <select class="form__input input-select" name="Status" required>
+                    <!option value="0" @((task.Status == IssueStatus.ToDo) ? "selected" : "")>Сделать</!option>
+                    <!option value="1" @((task.Status == IssueStatus.InProcess) ? "selected" : "")>В процессе</!option>
+                    <!option value="2" @((task.Status == IssueStatus.Review) ? "selected" : "")>Проверяется</!option>
+                    <!option value="3" @((task.Status == IssueStatus.Completed) ? "selected" : "")>Выполнена</!option>
+                </select>
+            </label>
+            <label class="input-form__label">
+                <span class="input-placeholder">приоритет</span>
+                <select class="form__input input-select" name="Priority" required>
+                    <!option value="0" @((task.Priority == Priority.Low) ? "selected" : "")>низкий</!option>
+                    <!option value="1" @((task.Priority == Priority.Middle) ? "selected" : "")>средний</!option>
+                    <!option value="2" @((task.Priority == Priority.High) ? "selected" : "")>высокий</!option>
+                </select>
+            </label>
+            <label class="input-form__label">
+                <span class="input-placeholder">ответственный</span>
+                <select class="form__input input-select" name="PerformerID" required>
+                    @foreach (SelectListItem option in ViewBag.Responsibilities)
+                    {
+                        <option value="@option.Value" selected="@(task.Performer.Email == option.Text) ? \" selected\" : \"\"">@option.Text</option>
+                    }
+                </select>
+            </label>
 
-    <button class="add-board-button">Сохранить</button>
-    </form>
+            <button class="add-board-button">Сохранить</button>
+            </form>
 
-    <form asp-action="DeleteTask" asp-controller="Boards" method="post">
-        <input type="hidden" id="taskID" name="taskID" />
-        <input type="hidden" value="@ViewBag.BoardID" name="boardID" />
-        <button class="add-board-button">Удалить</button>
-    </form>
-
+            <form asp-action="DeleteTask" asp-controller="Boards" method="post" >
+                <input type="hidden" value="@ViewBag.BoardID" name="boardID" />
+                <input type="hidden" value="@task.ID" name="taskID" />
+                <button class="add-board-button">Удалить</button>
+            </form>
+        </div>
+        }
     <a href="#" rel="modal:close"></a>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const buttons = document.querySelectorAll('.close-button');
-        buttons.forEach(button => {
-            button.addEventListener('click', function () {
-                const columnID = this.getAttribute('data-column-id');
-                document.getElementById('columnID').value = columnID;
-            });
-        });
-    });
-</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const buttons = document.querySelectorAll('.edit-task-link');
         buttons.forEach(button => {
             button.addEventListener('click', function () {
-                const columnID = this.getAttribute('data-task-id');
-                document.getElementById('taskID').value = columnID;
+                const taskID = this.getAttribute('data-task-id');
+                document.getElementById('taskID').value = taskID;
+
+                document.querySelectorAll('.issueform').forEach(element => {
+                    if (!element.classList.contains('hidden')) {
+                        element.classList.add('hidden');
+                    }
+                });
+                document.getElementById('ISSUE'+taskID).classList.remove("hidden");
             });
         });
     });

@@ -1,0 +1,51 @@
+﻿
+.board-archive {
+    display: flex;
+    gap: 15px; 
+}
+.archived-tasks {
+    margin-top: 50px;
+    display: flex;
+    gap: 15px;
+}
+
+table {
+    border-collapse: collapse; 
+    border-radius: 10px;
+    overflow: hidden; 
+}
+
+ th {
+    background: #444;
+    font-weight: bold;
+    padding: 12px;
+    text-align: center;
+}
+
+td {
+    background: #555;
+    color: #D9D9D9; 
+    padding: 10px;
+    text-align: center; 
+}
+
+th, td {
+    min-width: 143px;
+    border-top: 1px solid #777;
+}
+
+tr {
+    height: 50px; 
+}
+.restore-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+    .restore-button:hover {
+        background-color: #45a049;
+        color: white;
+    }

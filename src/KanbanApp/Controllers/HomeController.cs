@@ -18,8 +18,10 @@ namespace KanbanApp.Controllers
             int? userLoggedInID = HttpContext.Session.GetInt32("UserID");
             if (userLoggedInID == null)
                 return Redirect("/Users/Authorization");
+            var boards = _context.Board.Where(x => x.CreatorID == userLoggedInID || _context.UserBoard.Any(ub => ub.BoardID == x.ID && ub.UserID == userLoggedInID)).ToList();
 
-            return View(await _context.Board.ToListAsync());
+
+            return View(boards);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -43,10 +45,25 @@ namespace KanbanApp.Controllers
             _context.Add(userBoard);
 
             await _context.SaveChangesAsync();
-            Column newColumn = new Column();
-            newColumn.Name = "Сделать";
-            newColumn.BoardID = board.ID;
-            _context.Add(newColumn);
+            Column ToDoColumn = new Column();
+            ToDoColumn.Name = "Сделать";
+            ToDoColumn.BoardID = board.ID;
+            _context.Add(ToDoColumn);
+
+            Column InProcessColumn = new Column();
+            InProcessColumn.Name = "В процессе";
+            InProcessColumn.BoardID = board.ID;
+            _context.Add(InProcessColumn);
+
+            Column ReviewColumn = new Column();
+            ReviewColumn.Name = "Проверяется";
+            ReviewColumn.BoardID = board.ID;
+            _context.Add(ReviewColumn);
+
+            Column CompletedColumn = new Column();
+            CompletedColumn.Name = "Выполнена";
+            CompletedColumn.BoardID = board.ID;
+            _context.Add(CompletedColumn);
 
             await _context.SaveChangesAsync();
 

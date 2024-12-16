@@ -44,6 +44,15 @@
             return "-";
         }
 
+        public static string StringCut(string str)
+        {
+            if (str.Length > 16)
+            {
+                str = str.Substring(0, 15) + "...";  
+            }
+            return str;
+        }
+
     }
 
    

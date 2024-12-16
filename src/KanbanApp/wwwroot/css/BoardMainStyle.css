@@ -13,6 +13,15 @@
     width: 100%;
     white-space: nowrap;
 }
+
+.board-name {
+    text-decoration: none;
+    color: #ccc;
+}
+.board-name:hover {
+    font-weight:bolder;
+}
+
 .boardWrapper {
     display: flex;
     flex-direction: column;
@@ -25,7 +34,7 @@
     border-radius: 8px;
     margin: 0 10px;
     padding: 10px;
-    width: 350px;
+    width: 23%;
     position: relative;
     display: inline-block;
 }
@@ -57,22 +66,23 @@
     }
 
 .middle-priority {
-    background-color: #8e896a;
+    background-color: #b69e6b;
 }
     .middle-priority:hover {
-        background-color: #9b957a;
+        background-color: #c6b082;
     }
 
 .high-priority {
-    background-color: #8e766a;
+    background-color: #bd8678;
 }
     .high-priority:hover {
-        background-color: #9b837a;
+        background-color: #c38f82;
     }
 
-    .task .task-title {
-        font-weight: bold;
-    }
+.task .task-title {
+    font-weight: bold;
+    text-decoration: underline;
+}
 
 .add-buttons {
     margin: 20px;
@@ -130,12 +140,21 @@
     background: #39393a;
     padding-top: 30px;
 }
+.jquery-modal .modal.editTask {
+    position: fixed;
+    top: 15%;
+    left: 38%;
+    width: 350px;
+    height: 650px;
+    background: #39393a;
+    padding-top: 30px;
+}
 .jquery-modal .modal.generateLink {
     position: fixed;
     top: 15%;
     left: 38%;
     width: 350px;
-    height: 250px;
+    height: 175px;
     background: #39393a;
     padding-top: 30px;
 }

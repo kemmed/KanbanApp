@@ -15,12 +15,51 @@
 <div class="participants">
     @foreach (UserBoard ub in Model)
     {
-    <div class="participant">
+        <div class="participant">
             <div class="participant-email">@ub.User.Email (<span>@UserBoard.RoleToString(ub.UserRole)</span>)</div>
-        <div class="participant-buttons">
-            <button class="delete">Удалить</button>
-            <button>Изменить роль</button>
+            @if (ub.User.ID != ViewBag.UserID)
+            {
+                <div class="participant-buttons">
+                    <a class="delete-user" href="#delete-user" rel="modal:open" data-user-id="@ub.UserID">Удалить</a>
+                </div>
+            }
         </div>
-    </div>
     }
 </div>
+
+
+
+<div id="delete-user" class="modal delete" >
+    @foreach (User user in ViewBag.BoardUsers)
+    {
+        <div ID="USER@(@user.ID)" class="hidden issueform">
+            <form asp-action = "DeleteUser" asp-controller="Boards" method="post">
+                <input type="hidden" value="@ViewBag.BoardID" name="boardID" />
+                <input type="hidden" value="@user.ID" id="userID" name="userID" />
+                <p>Подтвердите удаление пользователя из доски.</p>
+                <button class="add-board-button">Подтвердить</button>
+            </form>
+        </div>
+    }
+
+    <a href="#" rel="modal:close"></a>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.delete-user');
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                const userID = this.getAttribute('data-user-id');
+                document.getElementById('userID').value = userID;
+
+                document.querySelectorAll('.issueform').forEach(element => {
+                    if (!element.classList.contains('hidden')) {
+                        element.classList.add('hidden');
+                    }
+                });
+                document.getElementById('USER' + userID).classList.remove("hidden");
+            });
+        });
+    });
+</script>

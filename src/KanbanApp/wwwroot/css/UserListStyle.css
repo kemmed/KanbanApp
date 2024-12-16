@@ -21,35 +21,39 @@
     border-radius: 8px;
     padding: 10px;
     margin-bottom: 10px;
+    min-height: 80px;
 }
 
 .participant-email {
-    font-size: 16px;
+    font-size: 17px;
+    margin-left: 25px;
 }
 
 .participant-buttons {
     display: flex;
 }
 
-    .participant-buttons button {
+    .participant-buttons a {
+        text-decoration: none;
         cursor: pointer;
         border: 2px solid #ccc;
-        height: 40px;
+        height: 50px;
         border-radius: 10px;
         background: transparent;
         color: #ccc;
         outline: none;
-        padding: 5px 10px;
-        margin-left: 5px;
+        padding: 10px 15px;
+        margin: 5px;
+        margin-right: 25px;
     }
 
-        .participant-buttons button:hover {
-            background: #fff;
-            border: 2px solid #fff;
-            color: #232323;
-        }
-        .participant-buttons button:hover {
-            background: #f7b5b5;
-            border: 2px solid #f7b5b5;
-            color: #232323;
-        }
+    .participant-buttons a:hover {
+        background: #fff;
+        border: 2px solid #fff;
+        color: #232323;
+    }
+    .participant-buttons .delete:hover {
+        background: #f7b5b5;
+        border: 2px solid #f7b5b5;
+        color: #232323;
+    }

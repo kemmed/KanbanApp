@@ -17,7 +17,7 @@
     <div class="board-list">
         @foreach (Board board in Model)
         {
-            <a href="/Boards/Board/@board.ID" class="board-item">@board.Name</a>
+            <a href="/Boards/Board/@board.ID" class="board-item">@Board.StringCut(board.Name)</a>
         }
     </div>
 </div>
