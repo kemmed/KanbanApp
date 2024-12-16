@@ -68,7 +68,6 @@
 
                     <a class="edit-task-link" href="#edit-task" rel="modal:open" data-task-id="@ic.Issue.ID">
                         <div class="@taskClass">
-                            @* <div class="task-title">@Issue.StringCut(ic.Issue.Name)</div> *@
                             <div class="task-title">@ic.Issue.Name</div>
                             <div class="task-description"><span style="font-weight: bold">Описание: </span>@ic.Issue.Description</div>
 
@@ -92,8 +91,8 @@
                             }
                             <div><span style="font-weight: bold">Статус: </span>@Issue.StatusToString(ic.Issue.Status)</div>
                             <div><span style="font-weight: bold">Приоритет: </span>@Issue.PriorityToString(ic.Issue.Priority)</div>
-                            <div><span style="font-weight: bold">Ответственный: </span>@Issue.StringCut(ic.Issue.Performer.Email)</div>
-                            <div><span style="font-weight: bold">Создатель: </span>@Issue.StringCut(ic.Issue.Creator.Email)</div>
+                            <div class ="task-description"><span style="font-weight: bold">Ответственный: </span>@ic.Issue.Performer.Email</div>
+                            <div class="task-description"><span style="font-weight: bold">Создатель: </span>@ic.Issue.Creator.Email</div>
                         </div>
 
                     </a>
@@ -227,7 +226,7 @@
                 <select class="form__input input-select" name="PerformerID" required>
                     @foreach (SelectListItem option in ViewBag.Responsibilities)
                     {
-                        <option value="@option.Value" selected="@(task.Performer.Email == option.Text) ? \" selected\" : \"\"">@option.Text</option>
+                            <!option value="@option.Value" @((task.Performer.Email == option.Text) ? "selected" : "")>@option.Text</!option>
                     }
                 </select>
             </label>
